@@ -1,0 +1,23 @@
+{
+  "name": "activityTest",
+  "version": "0.0.1",
+  "type": "flogo:activity",
+  "description": "activity description",
+  "author": "Antonio Davila <adavilag@tibco.com>",
+  "inputs":[
+    {
+      "name": "salutation",
+      "type": "string"
+    },
+    {
+      "name": "name",
+      "type": "string"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "string"
+    }
+  ]
+}
