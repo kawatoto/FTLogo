@@ -1,4 +1,4 @@
-package activityTest
+package FTLogo
 
 /*
 #cgo CFLAGS: -std=gnu11 -m64 -O2 -Wall -Wshadow -I/opt/tibco/ftl/5.2/include/
@@ -10,7 +10,6 @@ package activityTest
 #include <string.h>
 #include "tib/ftl.h"
 
-#define DEFAULT_URL "http://localhost:8080"
 #define CHECK(ex) \
 {                              \
     if(tibEx_GetErrorCode(ex)) \
@@ -24,9 +23,7 @@ package activityTest
     }                                                   \
 }
 
-const char      *realmServer    = DEFAULT_URL;
-
-int sendFTLMessage(char *realmserver, tibPublisher publisher, tibMessage message)
+int sendFTLMessage(char server[], char messageinput[])
 {
     tibEx               ex;
     tibRealm            realm = NULL;
@@ -38,7 +35,7 @@ int sendFTLMessage(char *realmserver, tibPublisher publisher, tibMessage message
     tib_Open(ex, TIB_COMPATIBILITY_VERSION);
 
     // connect to the realmserver to get a config, 'default' app is returned if the appName is NULL.
-    realm = tibRealm_Connect(ex, realmServer, NULL, NULL);
+    realm = tibRealm_Connect(ex, server, NULL, NULL);
 
     // Create the publisher object
     pub = tibPublisher_Create(ex, realm, NULL, NULL);
@@ -47,10 +44,10 @@ int sendFTLMessage(char *realmserver, tibPublisher publisher, tibMessage message
     // create the hello world msg.
     msg = tibMessage_Create(ex, realm, NULL);
     tibMessage_SetString(ex, msg, "type", "hello");
-    tibMessage_SetString(ex, msg, "message", "hello world earth");
+    tibMessage_SetString(ex, msg, "message", messageinput);
 
     // send hello world ftl msg
-    printf("sending 'hello world' message\n");
+    printf("sending: \'%s\' \n",messageinput);
     fflush(stdout);
 
     tibPublisher_Send(ex, pub, msg);
@@ -106,18 +103,20 @@ func (a *MyActivity) Metadata() *activity.Metadata {
 // Eval implements activity.Activity.Eval
 func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	// Get the activity data from the context
-	name := context.GetInput("name").(string)
-	salutation := context.GetInput("salutation").(string)
+	url := context.GetInput("url").(string)
+	message := context.GetInput("message").(string)
 
 	// Use the log object to log the greeting
-	log.Debugf("The Flogo engine says [%s] to [%s]", salutation, name)
+	log.Debugf("The Flogo engine sent the message [%s] to the url [%s]", message, url)
 
 	// Set the result as part of the context
-	context.SetOutput("result", "The Flogo engine says "+salutation+" to "+name)
+	context.SetOutput("result", "The Flogo engine sent the message "+message+" to the url"+url)
 
 	//C Code
 	fmt.Println("I am in Go code now!")
 	C.inC()
+	//C.sendFTLMessage(C.CString("http://localhost:8080"), C.CString("This is a FTL message sent from Flogo"))
+	C.sendFTLMessage(C.CString(url), C.CString(message))
 
 	// Signal to the Flogo engine that the activity is completed
 	return true, nil

@@ -1,4 +1,4 @@
-package activityTest
+package FTLogo
 
 import (
 	"io/ioutil"
@@ -49,11 +49,11 @@ func TestEval(t *testing.T) {
 	tc := test.NewTestActivityContext(getActivityMetadata())
 
 	//setup attrs
-	tc.SetInput("name", "Leon")
-	tc.SetInput("salutation", "Hello")
+	tc.SetInput("url", "http://localhost:8080")
+	tc.SetInput("message", "This is a FTL message sent from Flogo")
 	act.Eval(tc)
 
 	//check result attr
 	result := tc.GetOutput("result")
-	assert.Equal(t, result, "The Flogo engine says Hello to Leon")
+	assert.Equal(t, result, "The Flogo engine sent the message This is a FTL message sent from Flogo to the urlhttp://localhost:8080")
 }
