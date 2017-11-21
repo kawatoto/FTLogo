@@ -1,8 +1,8 @@
 package FTLogo
 
 /*
-#cgo CFLAGS: -std=gnu11 -m64 -O2 -Wall -Wshadow -Iinclude
-#cgo LDFLAGS: -Llib -ltib -ltibutil
+#cgo CFLAGS: -std=gnu11 -m64 -O2 -Wall -Wshadow -I/opt/tibco/ftl/5.2/lib/include
+#cgo LDFLAGS: -L/opt/tibco/ftl/5.2/lib -ltib -ltibutil
 
 #include <stdlib.h>
 #include <stdio.h>
