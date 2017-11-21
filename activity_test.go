@@ -49,11 +49,12 @@ func TestEval(t *testing.T) {
 	tc := test.NewTestActivityContext(getActivityMetadata())
 
 	//setup attrs
-	tc.SetInput("url", "http://localhost:8080")
+	//tc.SetInput("url", "http://localhost:8080")
+	tc.SetInput("url", "http://192.168.1.65:8080")
 	tc.SetInput("message", "This is a FTL message sent from Flogo")
 	act.Eval(tc)
 
 	//check result attr
 	result := tc.GetOutput("result")
-	assert.Equal(t, result, "The Flogo engine sent the message This is a FTL message sent from Flogo to the urlhttp://localhost:8080")
+	assert.Equal(t, result, "The Flogo engine sent the message This is a FTL message sent from Flogo to the urlhttp://192.168.1.65:8080")
 }

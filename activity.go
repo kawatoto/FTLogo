@@ -1,8 +1,8 @@
 package FTLogo
 
 /*
-#cgo CFLAGS: -std=gnu11 -m64 -O2 -Wall -Wshadow -I/opt/tibco/ftl/5.2/include
-#cgo LDFLAGS: -L/opt/tibco/ftl/5.2/lib -ltib -ltibutil
+#cgo CFLAGS: -std=gnu11 -m64 -O2 -Wall -Wshadow -Iinclude
+#cgo LDFLAGS: -Llib -ltib -ltibutil
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -67,9 +67,7 @@ int sendFTLMessage(char server[], char messageinput[])
     return 0;
 }
 
-void inC() {
-    printf("I am in C code now!\n");
-}*/
+*/
 import "C"
 
 import (
@@ -114,7 +112,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 
 	//C Code
 	fmt.Println("I am in Go code now!")
-	C.inC()
+	//C.inC()
 	//C.sendFTLMessage(C.CString("http://localhost:8080"), C.CString("This is a FTL message sent from Flogo"))
 	C.sendFTLMessage(C.CString(url), C.CString(message))
 
